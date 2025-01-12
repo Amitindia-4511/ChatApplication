@@ -1,30 +1,43 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import axiosInstance from "../lib/axiosInstance";
+// import axiosInstance from "../lib/axiosInstance";
 import Navbar from "./Navbar";
 import { BottomGradient, LabelInputContainer } from "./ui/custom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [userData, setUserData] = useState({
-    username: "",
+    name: "",
     age: 0,
     email: "",
     password: "",
   });
-
+  const navigate = useNavigate();
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axiosInstance.post("auth/signup", userData);
-    console.log("Form submitted", response);
+    try {
+      console.log(userData);
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/register",
+        userData
+      );
+      toast(response.data.message);
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+      toast("Error while creating user!");
+    }
   };
   return (
     <>
-      <Navbar />
+      <Navbar currentPage="register" />
       <div className="flex justify-center p-5">
         {/* <div className="bg-slate-50 min-w-full m-3">Hello</div> */}
         <div className="m-5 max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black dark:bg-black">
@@ -38,17 +51,17 @@ function Signup() {
           <form className="my-8" onSubmit={handleSubmit}>
             {/* <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4"></div> */}
             <LabelInputContainer>
-              <Label className="text-neutral-100 my-1" htmlFor="username">
-                Username
+              <Label className="text-neutral-100 my-1" htmlFor="name">
+                Name
               </Label>
               <Input
                 className="mb-3"
-                name="username"
-                id="username"
+                name="name"
+                id="name"
                 placeholder="Name"
                 onChange={handleChange}
                 type="text"
-                value={userData.username}
+                value={userData.name}
               />
             </LabelInputContainer>
             <LabelInputContainer>

@@ -1,14 +1,21 @@
 import { verifyToken } from "../utils/manageToken.utils.js";
 
-function verifyUser(req,res,next){
-    try {
-        const token = req.cookies;        
-        const verifiedToken = verifyToken(token.authUser);     
+function verifyUser(req, res, next) {
+  try {
+    const token = req.cookies;
+    if (token) {
+      const verifiedToken = verifyToken(token.authUser);
+      if (verifiedToken) {
         req.body.userId = verifiedToken.userId;
         next();
-    } catch (error) {
-        console.log('error while verifying user',error);
+      } else {
+        req.body.validToken = false;
+        return res.status(401).send({ message: "Invalid user" });
+      }
     }
+  } catch (error) {
+    console.log("error while verifying user", error);
+  }
 }
 
 export default verifyUser;

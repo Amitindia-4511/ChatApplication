@@ -1,8 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/store";
 
-function Navbar() {
+function Navbar({ currentPage }) {
+  const { logout, loggedOut } = useAuthStore();
+  const navigate = useNavigate();
+  async function logoutUser() {
+    console.log("Logout function");
+
+    await logout();
+    console.log(loggedOut);
+
+    if (loggedOut) {
+      navigate("/");
+    }
+  }
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 ">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -25,22 +38,48 @@ function Navbar() {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
-            <li>
-              <Link to={"signup"}>Register</Link>
-            </li>
-            <li>
-              <Link to={"login"}>Login</Link>
-            </li>
-            <li>
-              <Link to={"/"}>Home</Link>
-            </li>
+            {currentPage === "login" && (
+              <>
+                <li>
+                  <Link to="/signup">Register</Link>
+                </li>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+              </>
+            )}
+            {currentPage === "register" && (
+              <>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+              </>
+            )}
+            {currentPage === "message" && (
+              <>
+                {/* <li>
+                  <Link to="/">Home</Link>
+                </li> */}
+                <li>
+                  <button onClick={logoutUser}>Logout</button>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
-      <div className="navbar-center">
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+      <div className="max-sm:mx-[-3rem] sm:navbar-center">
+        <p className="text-cyan-400 text-3xl text-center font-bold font-mono">
+          Hamm...
+        </p>
+        {/* <Link to="/" className="btn btn-ghost text-xl">
+         
+        </Link> */}
       </div>
-      <div className="navbar-end">
+      {/* <div className="navbar-end">
         <button className="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +115,7 @@ function Navbar() {
             <span className="badge badge-xs badge-primary indicator-item"></span>
           </div>
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

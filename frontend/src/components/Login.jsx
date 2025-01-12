@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuthStore } from "../store/store";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -7,12 +7,12 @@ import { BottomGradient, LabelInputContainer } from "./ui/custom";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { login, authUser } = useAuthStore();
-  let navigate = useNavigate();
+  const { login } = useAuthStore();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   function handleChange(event) {
     const { name, value } = event.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
@@ -20,11 +20,12 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     await login(userData);
+    navigate("/message");
   }
   return (
     <>
-      <div className="mt-5">
-        <Navbar />
+      <div>
+        <Navbar currentPage="login" />
       </div>
       <div className="m-5 max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black dark:bg-black">
         <h2 className="font-bold text-xl text-neutral-300 dark:text-neutral-200">

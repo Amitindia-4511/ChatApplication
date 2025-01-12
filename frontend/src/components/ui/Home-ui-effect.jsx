@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export const TextHoverEffect = ({ text, duration }) => {
@@ -22,8 +22,8 @@ export const TextHoverEffect = ({ text, duration }) => {
   return (
     <svg
       ref={svgRef}
-      width="100%"
-      height="100%"
+      // width="100%"
+      // height="100%"
       viewBox="0 0 300 100"
       xmlns="http://www.w3.org/2000/svg"
       onMouseEnter={() => setHovered(true)}
@@ -82,7 +82,7 @@ export const TextHoverEffect = ({ text, duration }) => {
         textAnchor="middle"
         dominantBaseline="middle"
         strokeWidth="0.3"
-        className="font-[helvetica] font-bold stroke-neutral-200 dark:stroke-neutral-800 fill-transparent text-7xl  "
+        className="font-[helvetica] font-bold stroke-neutral-200 dark:stroke-neutral-800 fill-transparent text-7xl"
         style={{ opacity: hovered ? 0.7 : 0 }}
       >
         {text}

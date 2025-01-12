@@ -1,6 +1,6 @@
 import data from "../data/data.js";
 import { FaUserAlt } from "react-icons/fa";
-import { createBrowserRouter } from "react-router-dom";
+
 
 export default function Users() {
   return (

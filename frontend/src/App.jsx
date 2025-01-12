@@ -1,4 +1,3 @@
-import "./App.css";
 import {
   createBrowserRouter,
   Navigate,
@@ -10,6 +9,8 @@ import Home from "./components/Home";
 import Messege from "./components/Messege";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import { useAuthStore } from "./store/store";
+// import Authenticate from "./components/Authenticate";
 
 const router = createBrowserRouter([
   {
@@ -18,35 +19,30 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: (
-      <div className="h-screen w-screen">
-        <Login />
-      </div>
-    ),
+    element: <Login />,
   },
   {
     path: "/signup",
-    element: (
-      <div className="h-screen w-screen">
-        <Signup />
-      </div>
-    ),
+    element: <Signup />,
   },
   {
     path: "/message",
     element: <Messege />,
   },
+  // {
+  //   path: "/",
+  //   element: <Authenticate />,
+  // },
   // Catch-all route for unmatched paths
   { path: "*", element: <Navigate to="/" /> },
 ]);
 
 function App() {
-  const validUser = true;
   return (
-    <>
+    <main className="h-screen bg-black">
       <RouterProvider router={router} />
       <ToastContainer />
-    </>
+    </main>
   );
 }
 
