@@ -9,7 +9,7 @@ import Home from "./components/Home";
 import Messege from "./components/Messege";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { useAuthStore } from "./store/store";
+
 // import Authenticate from "./components/Authenticate";
 
 const router = createBrowserRouter([
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <main className="h-screen bg-black">
+    <main className="bg-zinc-950">
       <RouterProvider router={router} />
       <ToastContainer />
     </main>

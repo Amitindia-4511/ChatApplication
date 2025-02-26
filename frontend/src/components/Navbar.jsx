@@ -1,15 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/store";
+import { useAuthStore } from "../store/AuthStore";
 
 function Navbar({ currentPage }) {
   const { logout, loggedOut } = useAuthStore();
   const navigate = useNavigate();
   async function logoutUser() {
-    console.log("Logout function");
-
     await logout();
-    console.log(loggedOut);
-
     if (loggedOut) {
       navigate("/");
     }

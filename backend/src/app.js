@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import { json } from "express";
 import { authUserRouter } from "./routing/authUser.router.js";
 import connectionDatabase from "./config/database.js";
 import dotenv from "dotenv";
@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { chatRouter } from "./routing/chat.router.js";
 import verifyUser from "./middleware/verifyUser.js";
 import cors from "cors";
-
+import { httpserver, app } from "./socket.js";
 async function startServer() {
   dotenv.config();
 
@@ -16,7 +16,7 @@ async function startServer() {
   };
 
   const PORT = process.env.PORT || 3001;
-  const app = express();
+
   app.use(json());
   app.use(cookieParser());
   app.use(cors(corsOptions));
@@ -27,7 +27,7 @@ async function startServer() {
   app.use("/api/chat", verifyUser, chatRouter);
 
   await connectionDatabase();
-  app.listen(PORT, () => {
+  httpserver.listen(PORT, () => {
     console.log(`Server is started and listening at PORT ${PORT}`);
   });
 }

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-// import axiosInstance from "../lib/axiosInstance";
 import Navbar from "./Navbar";
 import { BottomGradient, LabelInputContainer } from "./ui/custom";
-import axios from "axios";
+// import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../lib/axiosInstance";
 
 function Signup() {
   const [userData, setUserData] = useState({
@@ -24,8 +24,8 @@ function Signup() {
     e.preventDefault();
     try {
       console.log(userData);
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
+      const response = await axiosInstance.post(
+        "auth/register",
         userData
       );
       toast(response.data.message);

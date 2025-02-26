@@ -4,7 +4,7 @@ import { findUserById } from "../../utils/query.utils.js";
 async function currentUser(req, res) {
   try {
     const token = req.cookies;
-    console.log(token);
+    // console.log(token);
 
     const verifiedToken = verifyToken(token.authUser);
     const user = await findUserById(verifiedToken.userId);

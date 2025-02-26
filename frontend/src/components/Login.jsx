@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuthStore } from "../store/store";
+import { useAuthStore } from "../store/AuthStore";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import Navbar from "./Navbar";

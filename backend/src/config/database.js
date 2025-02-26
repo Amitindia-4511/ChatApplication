@@ -3,6 +3,7 @@ import { databaseName } from "../constant/databaseName.js";
 
 async function connectDatabase(){
 try {
+    
     const MongoURI = `${process.env.MONGO_URI}/${databaseName}?retryWrites=true&w=majority&appName=RealTimeChatApplication`
     await mongoose.connect(MongoURI)
     console.log('Database is connected successfully');

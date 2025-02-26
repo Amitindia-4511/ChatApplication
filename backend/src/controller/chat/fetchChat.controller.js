@@ -6,26 +6,27 @@ async function fetchChat(req, res) {
     const { recieverId } = req.params;
     const senderId = req.body.userId;
     //getting the chat
-    console.log(recieverId);
-    console.log(senderId);
     let chat = await Chat.find({
       participants: { $all: [senderId, recieverId] },
-    }).populate("messages");
-    console.log(chat);
+    });
 
     if (chat) {
-      const messages = chat[0].messages;
-      messages.forEach((messages) => {
-        console.log(messages.message);
-        return res.status(200).json({ message: "We got your messages" });
+      const message = chat[0].messages;
+      const messages = await Message.find({
+        _id: { $in: message },
       });
+      // messages.forEach((messages) => {
+      //   console.log(messages.message);
+      //   return res.status(200).json({ message: "We got your messages" });
+      // });
+      return res.status(200).json({ messages: messages });
     } else {
       return res
         .status(400)
         .json({ message: "No chat found between these users" });
     }
   } catch (error) {
-    console.log("error while fetching chat");
+    console.log("error while fetching chat", error);
     return res
       .status(500)
       .json({ message: "something went wrong while fetching chats" });

@@ -5,7 +5,7 @@ import { userExist } from "../../utils/query.utils.js";
 async function registerUser(req, res) {
   try {
     const { name, age, email, password } = req.body;
-    console.log("Before");
+    // console.log("Before");
     const user = await userExist(email);
     if (user) {
       return res
@@ -15,7 +15,7 @@ async function registerUser(req, res) {
       const hashedPassword = await hashData(password);
       const newUser = new User({ name, age, email, password: hashedPassword });
       await newUser.save();
-      console.log("after");
+      // console.log("after");
       return res.status(201).json({ message: "User registred successfully" });
     }
   } catch (error) {
