@@ -3,6 +3,7 @@ import axiosInstance from "../lib/axiosInstance";
 import { toast } from "react-toastify";
 import { persist } from "zustand/middleware";
 import io from "socket.io-client";
+import { redirect } from "react-router-dom";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -14,10 +15,11 @@ export const useAuthStore = create(
       isSigningUp: false,
       isLoging: false,
       loggedOut: false,
-      users: null,
+      sideBarUsers: [],
       socket: null,
       login: async (userData) => {
         try {
+          set({ isLoging: true });
           const response = await axiosInstance.post("auth/login", userData, {
             withCredentials: true,
           });
@@ -26,7 +28,9 @@ export const useAuthStore = create(
             set({ authUser: response.data });
             toast.success(response.data.message);
             get().connectSocket();
-            console.log("Connected");
+            set({ isLoging: false });
+            console.log("before redirect");
+            redirect("/message");
           } else {
             toast.error("Login failed");
           }
@@ -49,6 +53,8 @@ export const useAuthStore = create(
             set({ loggedOut: true });
             toast.success(response.data.message);
             get().disconnectSocket();
+            localStorage.clear();
+            set({ authUser: null });
             console.log("Disconneted");
           }
         } catch (error) {
@@ -56,14 +62,29 @@ export const useAuthStore = create(
           toast.error("Error while logout");
         }
       },
+      getSideBarUsers: async () => {
+        const users = await axiosInstance.get("auth/getusers");
+        // console.log("Fetched users:", users.data);
+        set({ sideBarUsers: users.data });
+      },
       connectSocket: () => {
         const { authUser } = get();
-        if (!authUser || get().socket?.connected) {
+        console.log({ authUser });
+        if (!authUser) {
+          console.error("User not authenticated");
+          return;
+        } else if (get().socket?.connected) {
           console.log("Socket already connected");
           return;
         }
-        const socket = new io(BASE_URL);
-        set({ socket });
+        if (authUser.user.id) {
+          const socket = new io(BASE_URL, {
+            query: {
+              userId: authUser.user.id,
+            },
+          });
+          set({ socket });
+        }
       },
       disconnectSocket: () => {
         if (get().socket?.connected) {
@@ -74,7 +95,15 @@ export const useAuthStore = create(
     {
       name: "auth-storage",
       getStorage: () => localStorage,
-      partialize: (state) => ({ authUser: state.authUser }),
+      partialize: (state) => ({
+        authUser: state.authUser,
+      }),
     }
   )
 );
+
+// Re-establish socket connection on initialization if user is authenticated
+const { authUser, connectSocket } = useAuthStore.getState();
+if (authUser) {
+  connectSocket();
+}

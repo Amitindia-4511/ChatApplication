@@ -3,14 +3,11 @@ import { Chat } from "../../model/chat.model.js";
 import { verifyToken } from "../../utils/manageToken.utils.js";
 
 async function getUsers(req, res) {
-  const token = req.cookies;
-  const verifiedToken = verifyToken(token.authUser);
-  const { userId } = verifiedToken;
-  const userObjectId = new mongoose.Types.ObjectId(`${userId}`);
-  // console.log("userID:", userId);
-  // console.log("userObjectId:", userObjectId);
-
   try {
+    const token = req.cookies;
+    const verifiedToken = verifyToken(token.authUser);
+    const { userId } = verifiedToken;
+    const userObjectId = new mongoose.Types.ObjectId(`${userId}`);
     const users = await Chat.aggregate(
       // Match documents where the logged-in user is one of the participants
       [

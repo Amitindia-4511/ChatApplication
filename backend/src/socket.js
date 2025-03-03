@@ -5,29 +5,32 @@ import { Server } from "socket.io";
 
 const app = express();
 const httpserver = createServer(app);
-const server = new Server(httpserver, {
+const io = new Server(httpserver, {
   cors: {
     origin: "http://localhost:5173",
     credentials: true,
   },
 });
 
-let socketId = "";
+const socketUserMap = {};
 
 function userSocketId(recieverId) {
-  return socketId;
+  // console.log("Fetching socket ID for user:", recieverId);
+  // console.log("Current socketUserMap:", socketUserMap);
+  return socketUserMap[recieverId];
 }
 
-server.on("connection", (socket) => {
-  console.log("User connected", socket.id);
-  console.log(socket.handshake);
+io.on("connection", (socket) => {
+  const userId = socket.handshake.query.userId;
+  socketUserMap[userId] = socket.id;
 
-  // This is for private chats
-  socketId = socket.id;
+  // console.log("Socket Id", socket.id);
+  // console.log("userId", userId);
+  // console.log("SocketMap", socketUserMap);
 
   socket.on("disconnect", () => {
     console.log("User disconnected", socket.id);
   });
 });
 
-export { httpserver, app, server, userSocketId };
+export { httpserver, app, io, userSocketId };

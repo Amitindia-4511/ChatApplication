@@ -6,13 +6,10 @@ async function loginUser(req, res) {
   try {
     const { email, password } = req.body;
     const user = await userExist(email);
-    // console.log("In Login");
-
     if (user) {
-      // console.log("In Login user found");
+      console.log("User found:", user);
       const authUser = await compareData(password, user.password);
       if (authUser) {
-        // console.log("In Login auth user",user._id.toString(),user);
         const token = generateToken(user._id.toString());
         res.cookie("authUser", token, {
           httpOnly: true, // Prevent JavaScript from accessing the cookie
@@ -20,9 +17,11 @@ async function loginUser(req, res) {
           maxAge: 3600000, // 1 hour (same as token expiration)
           sameSite: "Strict", // Prevent the cookie from being sent in cross-origin requests
         });
-        // console.log("Logged In");
 
-        return res.status(200).json({ message: "Logged in successfully!",id:user._id });
+        return res.status(200).json({
+          message: "Logged in successfully!",
+          user: { id: user.id, name: user.name },
+        });
       } else {
         return res
           .status(400)

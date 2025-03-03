@@ -1,15 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore";
 
 function Navbar({ currentPage }) {
-  const { logout, loggedOut } = useAuthStore();
-  const navigate = useNavigate();
+  const { logout } = useAuthStore();
   async function logoutUser() {
     await logout();
-    if (loggedOut) {
-      navigate("/");
-    }
   }
+
   return (
     <div className="navbar bg-base-100 ">
       <div className="navbar-start">
