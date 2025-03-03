@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../store/AuthStore";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -7,12 +7,12 @@ import { BottomGradient, LabelInputContainer } from "./ui/custom";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { login } = useAuthStore();
+  const { login, authUser, isLoging } = useAuthStore();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
+
   function handleChange(event) {
     const { name, value } = event.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
@@ -20,7 +20,6 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     await login(userData);
-    navigate("/message");
   }
   return (
     <>
