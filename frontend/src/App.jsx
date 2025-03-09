@@ -13,7 +13,6 @@ import { useAuthStore } from "./store/AuthStore";
 
 function App() {
   const { authUser } = useAuthStore();
-  console.log("App jsx", authUser);
   const router = createBrowserRouter(
     [
       {

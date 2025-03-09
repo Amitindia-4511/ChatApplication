@@ -4,7 +4,7 @@ import { TextHoverEffect } from "./ui/Home-ui-effect";
 function Home() {
   return (
     <div className="flex flex-col content-center items-center justify-center">
-      <TextHoverEffect text="ACET" />
+      <TextHoverEffect text="AMIT" />
       <div>
         <Link to="/signup" className="btn btn-accent m-3 min-w-28">
           Register

@@ -8,7 +8,7 @@ async function getUsers(req, res) {
     const verifiedToken = verifyToken(token.authUser);
     const { userId } = verifiedToken;
     const userObjectId = new mongoose.Types.ObjectId(`${userId}`);
-    const users = await Chat.aggregate(
+    const aggregateUsers = await Chat.aggregate(
       // Match documents where the logged-in user is one of the participants
       [
         {
@@ -54,6 +54,12 @@ async function getUsers(req, res) {
       ]
     );
 
+    const users = aggregateUsers.map((user) => {
+      const userDetails = user.user_details[0];
+      // console.log({ userDetails });
+      const { _id, name, email, age } = userDetails;
+      return { name, email, age, _id };
+    });
     if (users) {
       return res.json(users);
     } else {

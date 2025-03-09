@@ -17,6 +17,7 @@ export const useAuthStore = create(
       loggedOut: false,
       sideBarUsers: [],
       socket: null,
+
       login: async (userData) => {
         try {
           set({ isLoging: true });
@@ -55,7 +56,7 @@ export const useAuthStore = create(
             get().disconnectSocket();
             localStorage.clear();
             set({ authUser: null });
-            console.log("Disconneted");
+            set({ sideBarUsers: [] });
           }
         } catch (error) {
           console.log("error while logout", error);
@@ -66,6 +67,24 @@ export const useAuthStore = create(
         const users = await axiosInstance.get("auth/getusers");
         // console.log("Fetched users:", users.data);
         set({ sideBarUsers: users.data });
+      },
+      getSearchedUsers: async (debouncedSearch) => {
+        const response = await axiosInstance.get(
+          `auth/searchusers?query=${debouncedSearch}`
+        );
+        if (response.status === 200 && response.data) {
+          set({
+            sideBarUsers: [
+              ...get().sideBarUsers,
+              ...response.data.filter(
+                (user) =>
+                  !get().sideBarUsers.some(
+                    (existingUser) => existingUser._id === user._id
+                  )
+              ),
+            ],
+          });
+        }
       },
       connectSocket: () => {
         const { authUser } = get();
