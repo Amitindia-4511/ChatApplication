@@ -7,6 +7,9 @@ import { chatRouter } from "./routing/chat.router.js";
 import verifyUser from "./middleware/verifyUser.js";
 import cors from "cors";
 import { httpserver, app } from "./socket.js";
+import path from "path";
+import express from "express";
+
 async function startServer() {
   dotenv.config();
 
@@ -16,6 +19,13 @@ async function startServer() {
   };
 
   const PORT = process.env.PORT || 3001;
+  const __dirname = path.resolve();
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    });
+  }
 
   app.use(json());
   app.use(cookieParser());

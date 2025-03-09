@@ -5,7 +5,8 @@ import { persist } from "zustand/middleware";
 import io from "socket.io-client";
 import { redirect } from "react-router-dom";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL =
+  import.meta.env.MODE === "development" ? "http://localhost:3000" : "/";
 
 export const useAuthStore = create(
   persist(
